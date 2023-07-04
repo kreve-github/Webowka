@@ -4,8 +4,33 @@ import { DataTable } from "./components/DataTable";
 import { Columns } from "./components/Columns";
 import { UserNav } from "./components/UserNav";
 import { navigationLinks } from "../../config/navigationLinks";
+import { useEffect, useState } from "react";
+
+
+
+const getCustomersList = () => {
+  const [customers, setCustomers] = useState([])
+
+  const fetchCustomersData = () => {
+    fetch("http://localhost:8000/customers")
+      .then(response => response.json())
+      .then((data) => {
+        const customerData = data.map((customer) => ({
+          fullname: `${customer.name} ${customer.surname}`,
+          id: customer.id,
+          email: customer.email,
+          phoneNumber: customer.phone_number,
+        }))
+        setCustomers(customerData)
+      })
+  } 
+  useEffect(() => {fetchCustomersData()}, [customers])
+  return customers  
+}
+
 
 export const CustomersPage = () => {
+  const customersList = getCustomersList()
   return (
     <div className="hidden flex-col md:flex">
       <div className="border-b">
@@ -22,14 +47,7 @@ export const CustomersPage = () => {
         </div>
         <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
           <DataTable
-            data={[
-              {
-                id: 1,
-                fullname: "Test",
-                email: "test@example.com",
-                phoneNumber: "000-000-000",
-              },
-            ]}
+            data={customersList}
             columns={Columns}
           />
         </div>
