@@ -4,8 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import "./index.css";
 import { Layout } from "@/components/Layout";
-import { DashboardPage, CustomersPage } from "@/pages";
+import { DashboardPage, CustomersPage, OrdersPage } from "@/pages";
 import { AddCustomerPage } from "./pages/AddCustomerPage";
+// import { AddOrderPage } from "./pages/AddOrderPage";
 
 const router = createBrowserRouter([
   {
@@ -21,9 +22,17 @@ const router = createBrowserRouter([
         element: <CustomersPage />,
       },
       {
+        path: "orders",
+        element: <OrdersPage />,
+      },
+      {
         path: "add-customer",
         element: <AddCustomerPage />,
       },
+      // {
+      //   path: "add-order",
+      //   element: <AddOrderPage />,
+      // },
     ],
   },
 ]);

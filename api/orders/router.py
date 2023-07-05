@@ -27,12 +27,12 @@ async def get_order_by_id(order_id: int):
 @router.post("/add-order")
 async def create_order(customer_id: int, product_id: int):
     if product_id in list(PRODUCTS_STORAGE.keys()) and customer_id in list(CUSTOMER_STORAGE):
-        if ORDERS_STORAGE:
-            order_id = max(list(ORDERS_STORAGE.keys()))+1
-        else:
-            order_id = 1
+        order_id =max(list(ORDERS_STORAGE.keys()))+1 if ORDERS_STORAGE else 1
         product = PRODUCTS_STORAGE[product_id]
-        order = Order(id = order_id, customer_id = customer_id, products = [product])
+        customer_name = f"{CUSTOMER_STORAGE[customer_id].name} {CUSTOMER_STORAGE[customer_id].surname}"
+        product_names = PRODUCTS_STORAGE[product_id].name
+        price = PRODUCTS_STORAGE[product_id].price
+        order = Order(id=order_id, customer_id=customer_id, products=[product], customer_name=customer_name, products_names=product_names, sum=price)
         ORDERS_STORAGE[order_id] = order
         return order
     else:
@@ -42,6 +42,8 @@ async def create_order(customer_id: int, product_id: int):
 async def update_order(order_id: int, product_id: int):
     if order_id in list(ORDERS_STORAGE.keys()) and product_id in list(PRODUCTS_STORAGE.keys()):
         ORDERS_STORAGE[order_id].products.append(PRODUCTS_STORAGE[product_id])
+        ORDERS_STORAGE[order_id].products_names += f", {PRODUCTS_STORAGE[product_id].name}"
+        ORDERS_STORAGE[order_id].sum += PRODUCTS_STORAGE[product_id].price
     else:
         return {"message": f"Invalid value of order_id or product_id"}
     

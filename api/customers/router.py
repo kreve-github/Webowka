@@ -14,11 +14,8 @@ async def get_customers() -> list[Customer]:
     return list(get_customers_storage().values())
 
 @router.post("/add-customer")
-async def create_customer(customer: CustomerCreateSchema) -> Customer:
-    if CUSTOMERS_STORAGE:
-        customer_id = max(list(CUSTOMERS_STORAGE.keys()))+1
-    else:
-        customer_id = 1
+async def create_customer(customer: CustomerCreateSchema) -> Customer:   
+    customer_id = max(list(CUSTOMERS_STORAGE.keys()))+1 if CUSTOMERS_STORAGE else 1
     new_customer = Customer(**customer.dict(), id = customer_id)
     CUSTOMERS_STORAGE[customer_id] = new_customer
     return new_customer

@@ -13,10 +13,7 @@ async def get_products() -> list[Product]:
 
 @router.post("/add-product")
 async def create_product(product: ProductCreateSchema) -> Product:
-    if PRODUCTS_STORAGE:
-        product_id = max(list(PRODUCTS_STORAGE.keys()))+1
-    else:
-        product_id = 1
+    product_id = max(list(PRODUCTS_STORAGE.keys()))+1 if PRODUCTS_STORAGE else 1
     new_product = Product(**product.dict(), id = product_id)
     PRODUCTS_STORAGE[product_id] = new_product
     return new_product
